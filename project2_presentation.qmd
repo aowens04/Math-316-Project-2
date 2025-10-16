@@ -1,0 +1,24 @@
+---
+title: "Bank Marketing Data"
+author: "Amaya Owens, Paige Hill, Lauren McIntosh"
+format: 
+ revealjs:
+  theme: sky
+  transition: slide
+  hash: true
+---
+
+## Dataset Description
+
+
+
+## Basic Information
+
+## Statistical Measures 
+
+## Distributions
+
+## Questions
+* What are the key demographic and financial profiles of clients who subscribe to a term deposit compared to those who do not?
+* How does the strategy of the marketing campaign itself (specifically the timing and frequency of contact) correlate with the success rate of subscriptions?
+* To what extent does a client's past interaction with the bank, including previous campaign outcomes, predict their likelihood of subscribing in the current campaign?
