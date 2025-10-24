@@ -7,12 +7,50 @@ format:
   transition: slide
   hash: true
 ---
+## Background Information
+* Data was collected to analyze the effectiveness of a bank's marketing campaign
+* Selling long-term deposits
+* Previous research only yielded good results when using call duration
+* Allows them to focus resources on customers most likely to subscribe
+
 
 ## Dataset Description
-
-
+* Data collected from a Portuguese Bank 
+* Collected from 2008 to 2013, so it is affected by the financial crisis
+* The researchers began with 150 features and selected 17 of the most relevant features
 
 ## Basic Information
+:::: {.columns}
+::: {.column width="50%"}
+```{python}
+import pandas as pd
+from great_tables import GT, style, loc
+df = pd.read_csv("./bank-full.csv", sep=';')
+df2 = pd.DataFrame({
+ '#': ['0', '1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16'],
+ 'column': ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y'], 
+ 'data type': ['int64', 'object', 'object', 'object', 'object','int64', 'object','object','object', 'int64', 'object', 'int64','int64','int64','int64','object', 'object'] 
+})
+
+information_table = GT(df2.head(9)).tab_style(
+    style = style.text(size = "30px"),
+    locations = loc.body()
+  ).opt_horizontal_padding(scale=3)
+information_table
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+information_table2 = GT(df2.tail(8)).tab_style(
+    style = style.text(size = "30px"),
+    locations = loc.body()
+  ).opt_horizontal_padding(scale=3)
+information_table2
+
+```
+:::
+::::
 
 ## Statistical Measures 
 
