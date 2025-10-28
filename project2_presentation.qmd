@@ -8,16 +8,19 @@ format:
   hash: true
 ---
 ## Background Information
-* Data was collected to analyze the effectiveness of a bank's marketing campaign
+* Data was collected from a Portuguese bank to analyze the effectiveness of their marketing campaign
+* Collected from 2008 to 2013, so it is affected by the financial crisis
 * Selling long-term deposits
 * Previous research only yielded good results when using call duration
 * Allows them to focus resources on customers most likely to subscribe
 
 
 ## Dataset Description
-* Data collected from a Portuguese Bank 
-* Collected from 2008 to 2013, so it is affected by the financial crisis
 * The researchers began with 150 features and selected 17 of the most relevant features
+* 17 columns and 45,211 rows
+* Features: demographics, financial info, campaign details
+* Mix of numerical and categorical data types
+* Some "unknown" values in contact method and previous outcomes
 
 ## Basic Information
 :::: {.columns}
@@ -53,10 +56,47 @@ information_table2
 ::::
 
 ## Statistical Measures 
+| Variable | Age (years) | Balance (€) | Campaign (contacts) | Duration (sec) |
+|----------|-------------|-------------|---------------------|----------------|
+| **Minimum** | 18 | -8,019 | 1 | 0 |
+| **Median** | 39 | 448 | 2 | 180 |
+| **Maximum** | 95 | 102,127 | 63 | 4,918 |
+| **Mean** | 40.9 | 1,362 | 2.8 | 258 |
+| **Std Dev** | 10.6 | 3,044 | 3.1 | 258 |
+
+## Demographics & Features {.smaller}
+:::: {.columns}
+::: {.column width="50%"}
+
+| Category | Most Common | Count | % Total |
+|----------|-------------|-------|---------|
+| **Job** | Blue-collar | 9,732 | 21.5% |
+| **Education** | Secondary | 22,472 | 49.7% |
+| **Marital** | Married | 27,214 | 60.2% |
+| **Housing Loan** | Yes | 25,130 | 55.6% |
+| **Personal Loan** | No | 37,967 | 84.0% |
+| **Contact Month** | May | 15,629 | 34.6% |
+
+:::
+:::{.column width="10%"}
+:::
+
+::: {.column width="40%" .smaller}
+**Key Statistics:**
+
+* **Age:** 18-95 years (mean: 40.9)
+* **Balance:** 7.9% have a negative balance
+* **Campaign:** Most contacted 1-2 times
+* **Duration:** 14.8% had 0-second calls
+* **Previous contact:** 81.7% never contacted before
+* **Target variable:** 11.7% subscribed 
+
+:::
+::::
 
 ## Distributions
 
 ## Questions
 * What are the key demographic and financial profiles of clients who subscribe to a term deposit compared to those who do not?
 * How does the strategy of the marketing campaign itself (specifically the timing and frequency of contact) correlate with the success rate of subscriptions?
-* To what extent does a client's past interaction with the bank, including previous campaign outcomes, predict their likelihood of subscribing in the current campaign?
+* To what extent does a client's past interaction with the bank, including previous campaign outcomes, predict their likelihood of subscribing for the current campaign?
