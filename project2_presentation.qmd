@@ -6,6 +6,7 @@ format:
   theme: sky
   transition: slide
   hash: true
+embed-resources: true
 ---
 ## Background Information
 * Data was collected from a Portuguese bank to analyze the effectiveness of their marketing campaign
@@ -19,41 +20,60 @@ format:
 * The researchers began with 150 features and selected 17 of the most relevant features
 * 17 columns and 45,211 rows
 * Features: demographics, financial info, campaign details
-* Mix of numerical and categorical data types
 * Some "unknown" values in contact method and previous outcomes
 
 ## Basic Information
-:::: {.columns}
-::: {.column width="50%"}
 ```{python}
 import pandas as pd
+import altair as alt
 from great_tables import GT, style, loc
-df = pd.read_csv("./bank-full.csv", sep=';')
-df2 = pd.DataFrame({
- '#': ['0', '1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16'],
- 'column': ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y'], 
- 'data type': ['int64', 'object', 'object', 'object', 'object','int64', 'object','object','object', 'int64', 'object', 'int64','int64','int64','int64','object', 'object'] 
-})
 
-information_table = GT(df2.head(9)).tab_style(
-    style = style.text(size = "30px"),
-    locations = loc.body()
-  ).opt_horizontal_padding(scale=3)
-information_table
+df = pd.read_csv("./bank-full.csv", sep=';')
+df_sample = df.sample(5000, random_state=516)
+
 ```
+
+
+::::{.columns}
+:::{.column width=20%}
+
+| **Var** | **Data type** | 
+|---------|---------------|
+| Age | int |
+| Job|  obj | 
+| Martial |  obj |
+| Education |  obj |
+| Default |  obj |
+| Balance|  int | 
+:::
+:::{.column width=20%}
+
+:::
+ 
+:::{.column width=20%}
+|**Var** | **Data Type**|
+|--------|---------------|
+|Housing | obj |
+| Loan | obj 
+| Contact |  obj |
+| Day | int | 
+| Month |  obj |
+| Duration | int |
+:::
+:::{.column width=20%}
 :::
 
-::: {.column width="50%"}
-```{python}
-information_table2 = GT(df2.tail(8)).tab_style(
-    style = style.text(size = "30px"),
-    locations = loc.body()
-  ).opt_horizontal_padding(scale=3)
-information_table2
-
-```
+:::{.column width=20%}
+|**Var** | **Data Type**|
+|--------|---------------|
+| Campaign |  int |
+| PDays |  int |
+| Previous |  int |
+| POutcome |  obj |
+| y | obj |
 :::
 ::::
+
 
 ## Statistical Measures 
 | Variable | Age (years) | Balance (€) | Campaign (contacts) | Duration (sec) |
@@ -94,7 +114,138 @@ information_table2
 :::
 ::::
 
-## Distributions
+## Subscriptions
+
+```{python}
+
+y_dist = df['y'].value_counts(normalize=True).reset_index()
+y_dist.columns = ['Subscription', 'Proportion']
+
+alt.Chart(y_dist).mark_bar().encode(
+x=alt.X('Subscription', sort='-y'),
+y=alt.Y('Proportion', title='Proportion of Clients'),
+color='Subscription'
+).properties(
+	title='Overall Distribution of Term Deposit Subscription',
+	width=600,
+	height=400
+).configure_axis(
+    labelFontSize=14,  # Adjust font size of axis labels
+    titleFontSize=16   # Adjust font size of axis titles
+).configure_title(
+	fontSize=20
+)
+```
+
+## Education Level
+
+```{python}
+edu_chart = (
+alt.Chart(df_sample)
+.mark_bar()
+.encode(
+x=alt.X('education:N', title='Education Level', sort='-y'),
+y=alt.Y('count():Q', title='Number of Clients'),
+color=alt.Color('y:N', title='Subscribed?'),
+column=alt.Column('y:N', title='Subscription Outcome')
+)
+.properties(
+	title='Education Level by Subscription Status',
+	width=400,
+	height=400
+).configure_axis(
+    labelFontSize=14,  # Adjust font size of axis labels
+    titleFontSize=16   # Adjust font size of axis titles
+).configure_title(
+	fontSize=20
+).configure_text(
+	fontSize=14
+)
+)
+edu_chart
+
+```
+
+## Age
+
+```{python}
+age_chart = (
+alt.Chart(df_sample)
+.mark_area(opacity=0.6)
+.encode(
+x=alt.X('age', bin=alt.Bin(maxbins=30), title='Age'),
+y=alt.Y('count()', title='Number of Clients'),
+#color=alt.Color('y', title='Subscribed?')
+color='y:N'
+)
+.properties(
+	title='Age Distribution by Subscription Status',
+	width=600,
+	height=400
+	)
+).configure_axis(
+	labelFontSize=14,  # Adjust font size of axis labels
+	titleFontSize=16   # Adjust font size of axis titles
+).configure_title(
+	fontSize=20
+)
+
+age_chart
+```
+
+## Frequency of Contact
+
+```{python}
+contact_chart = (
+alt.Chart(df_sample)
+.mark_boxplot()
+.encode(
+x=alt.X('y:N', title='Subscribed?'),
+y=alt.Y('campaign:Q', title='Number of Contacts in Current Campaign'),
+color='y:N'
+)
+.properties(
+	title='Campaign Contact Frequency by Subscription',
+	width=300,
+	height=400
+).configure_axis(
+    labelFontSize=14,  # Adjust font size of axis labels
+    titleFontSize=16   # Adjust font size of axis titles
+).configure_title(
+	fontSize=20
+)
+)
+contact_chart
+
+```
+
+## Outcome of Previous Campaigns
+
+```{python}
+
+prev_chart = (
+alt.Chart(df_sample)
+.mark_bar()
+.encode(
+x=alt.X('poutcome:N', title='Previous Campaign Outcome'),
+y=alt.Y('count():Q', title='Number of Clients'),
+color='y:N'
+)
+.properties(
+	title='Previous Campaign Outcome by Subscription Status',
+	width=300,
+	height=400
+).configure_axis(
+    labelFontSize=14,  # Adjust font size of axis labels
+    titleFontSize=16   # Adjust font size of axis titles
+).configure_title(
+	fontSize=20
+)
+
+)
+prev_chart
+
+```
 
 ## Questions
 * What are the key demographic and financial profiles of clients who subscribe to a term deposit compared to those who do not?
