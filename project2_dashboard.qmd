@@ -1,0 +1,53 @@
+---
+title: "Marketing Data"
+author: "Paige Hill, Lauren McIntosh, Amaya Owens"
+format:
+  dashboard:
+    theme: flatly
+    orientation: rows
+    embed-resources: true
+jupyter:
+  kernelspec:
+    name: python3
+    display_name: Python 3
+    language: python
+---
+
+```{python}
+#| label: info
+#| include: false
+
+
+import pandas as pd
+import altair as alt
+import numpy as np
+from great_tables import GT
+import matplotlib.pyplot as plt
+alt.renderers.enable('html')
+
+#initializing dataframe
+df = pd.read_csv("./bank-full.csv")
+
+#sample dataframe
+df_sample = df.sample(5000, random_state=516)
+
+```
+# Demographics and Finances
+## Row {height="60px"}
+<div style="font-size: 15pt">What are the demographic and financial profiles of clients who subscribe to a term deposit compared to those who do not?</div>
+
+## Row
+
+
+# Strategy
+
+## Row {height="60px"}
+<div style="font-size: 15pt">How does the strategy of the campaign correlate with success rate of subscriptions?</div>
+
+## Row 
+
+# Past Campaigns
+## Row {height="60px"}
+<div style="font-size: 15pt"> To what extent does a client's past interaction with the bank predict their liklihood of subscribing for the current campaign? </div>
+
+## Row
