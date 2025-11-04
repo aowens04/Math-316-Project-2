@@ -17,7 +17,6 @@ jupyter:
 #| label: info
 #| include: false
 
-
 import pandas as pd
 import altair as alt
 import numpy as np
@@ -26,7 +25,7 @@ import matplotlib.pyplot as plt
 alt.renderers.enable('html')
 
 #initializing dataframe
-df = pd.read_csv("./bank-full.csv")
+df = pd.read_csv("bank-full.csv", sep=";")
 
 #sample dataframe
 df_sample = df.sample(5000, random_state=516)
@@ -46,8 +45,97 @@ df_sample = df.sample(5000, random_state=516)
 
 ## Row 
 
-# Past Campaigns
+# Personal & Housing Loans
+
 ## Row {height="60px"}
-<div style="font-size: 15pt"> To what extent does a client's past interaction with the bank predict their liklihood of subscribing for the current campaign? </div>
+<div style="font-size: 15pt"> To what extent does a client's current loans affect their likelihood of subscribing for the current campaign? </div>
 
 ## Row
+```{python}
+loan_comparison = (
+alt.Chart(df_sample)
+.transform_fold(
+["housing", "loan"],
+as_=["Loan Type", "Status"]
+)
+.mark_bar()
+.encode(
+x=alt.X("Status:N", title="Has Loan?"),
+y=alt.Y("count():Q", title="Number of Clients"),
+color=alt.Color("y:N", title="Subscribed?"),
+column=alt.Column("Loan Type:N", title=None)
+)
+.properties(
+title="Subscription Status by Housing and Personal Loan Ownership",
+width=200,
+height=300
+)
+)
+
+loan_comparison
+```
+
+# Past Campaigns
+## Row {height="60px"}
+<div style="font-size: 15pt"> To what extent does a client's past interaction with the bank affect their likelihood of subscribing for the current campaign? </div>
+
+## Row
+
+```{python}
+
+#Click selection on previous outcome
+
+poutcome_click = alt.selection_point(fields=["poutcome"], value="success")
+
+#Previous outcome selector
+
+poutcome_selector = (
+alt.Chart(df_sample)
+.mark_bar()
+.encode(
+y=alt.Y("poutcome:N", sort="-x", title="Previous Campaign Outcome"),
+x=alt.X("count():Q", title="Number of Clients"),
+color=alt.when(poutcome_click)
+.then(alt.Color("poutcome:N"))
+.otherwise(alt.value("lightgray")),
+opacity=alt.when(poutcome_click)
+.then(alt.value(1))
+.otherwise(alt.value(0.4)),
+)
+.add_params(poutcome_click)
+.properties(width=250, height=300, title="Select Previous Outcome")
+)
+
+#Filtered charts
+
+pdays_filtered = (
+alt.Chart(df_sample)
+.mark_bar(size=8)
+.encode(
+x=alt.X("pdays:Q", bin=alt.Bin(maxbins=30), title="Days Since Last Contact"),
+y=alt.Y("count():Q", title="Number of Clients"),
+color=alt.Color("y:N", title="Subscribed?")
+)
+.transform_filter(poutcome_click)
+.properties(width=300, height=250, title="Days Since Last Contact (Filtered)")
+)
+
+previous_filtered = (
+alt.Chart(df_sample)
+.mark_bar(size=8)
+.encode(
+x=alt.X("previous:Q", bin=alt.Bin(maxbins=20), title="Number of Previous Contacts"),
+y=alt.Y("count():Q", title="Number of Clients"),
+color=alt.Color("y:N", title="Subscribed?")
+)
+.transform_filter(poutcome_click)
+.properties(width=300, height=250, title="Previous Contacts (Filtered)")
+)
+
+
+dashboard = poutcome_selector | pdays_filtered | previous_filtered
+dashboard.properties(
+    title="Interactive Exploration of Past Interactions and Subscription Outcomes"
+)
+
+```
