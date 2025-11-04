@@ -44,7 +44,62 @@ df_sample = df.sample(5000, random_state=516)
 <div style="font-size: 15pt">How does the strategy of the campaign correlate with success rate of subscriptions?</div>
 
 ## Row 
+```{python}
+month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+df['month'] = pd.Categorical(df['month'], categories=month_order, ordered=True)
 
+#what month someone is contacted and success of campaign
+
+month_crosstab = pd.crosstab(df["month"], df["y"])
+month_crosstab['percent'] = month_crosstab['yes']/(month_crosstab['yes'] + month_crosstab['no'])
+month_crosstab['month'] = month_order
+reordered_month = month_crosstab[['month', 'yes', 'no', 'percent']]
+
+pretty_month = (GT(reordered_month)
+    .tab_header(title="Month of Contact")
+    .fmt_number(columns='percent', decimals=2)
+    .data_color(
+        palette="Blues",
+        domain=[0.11, 1],
+        na_color="white"
+    )
+    .cols_align(align="center", columns=['month','yes','no','percent'])
+    .opt_vertical_padding(scale=0.5)
+)
+pretty_month
+```
+
+```{python}
+#| label : campaign
+#| include : false
+#put data into categories
+bins = [0,10,20,30,40,50,60,70]
+labels=["1-10","11-20","21-30","31-40","41-50","51-60","61-70"]
+binned_data = pd.cut(df['campaign'], bins=bins, labels=labels)
+
+#make crosstab table
+campaign_crosstab = pd.crosstab(binned_data, df["y"])
+campaign_crosstab['percent'] = campaign_crosstab['yes']/(campaign_crosstab['yes'] + campaign_crosstab['no'])
+campaign_crosstab.reset_index()
+campaign_crosstab['contacts']=campaign_crosstab.index
+reordered_campaign = campaign_crosstab[['contacts','yes','no','percent']]
+```
+```{python}
+#stylize table
+pretty_campaign = (GT(reordered_campaign)
+    .tab_header(title="Number of Contacts")
+    .fmt_number(columns='percent', decimals=2)
+    .data_color(
+        palette="Blues",
+        domain=[0.11, 1],
+        na_color="white",
+        columns="percent"
+    )
+    .cols_align(align="center", columns=['campaign','yes','no','percent'])
+               )
+
+pretty_campaign
+```
 # Personal & Housing Loans
 
 ## Row {height="60px"}
