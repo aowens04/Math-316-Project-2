@@ -45,6 +45,32 @@ df_sample = df.sample(5000, random_state=516)
 
 ## Row 
 ```{python}
+day_bins = [0,7,14,21,30]
+day_labels=["1-7","8-14","15-21","22-30"]
+binned_days = pd.cut(df['day'], bins=day_bins, labels=day_labels)
+
+days_crosstab = pd.crosstab(binned_days, df['y'])
+days_crosstab['percent'] = days_crosstab['yes']/(days_crosstab['no']+days_crosstab['yes'])
+days_crosstab['days'] = days_crosstab.index
+reordered_days = days_crosstab[['days','yes','no','percent']]
+
+pretty_days = (GT(reordered_days)
+    .tab_header(title="Days of Contact")
+    .fmt_number(columns='percent', decimals=2)
+    .data_color(
+        palette="Blues",
+        domain=[0.11, 1],
+        na_color="white",
+        columns="percent"
+    )
+    .cols_align(align="center", columns=['days','yes','no','percent'])
+
+               )
+
+
+pretty_days
+```
+```{python}
 month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 df['month'] = pd.Categorical(df['month'], categories=month_order, ordered=True)
 
