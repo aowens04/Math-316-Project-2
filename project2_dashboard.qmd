@@ -199,7 +199,9 @@ reordered_days = days_crosstab[['days','yes','no','percent']]
 
 pretty_days = (GT(reordered_days)
     .tab_header(title="Days of Contact")
-    .fmt_number(columns='percent', decimals=2)
+    .tab_options(table_width="75%")
+    .fmt_percent(columns='percent')
+    .fmt_number(columns = ['yes', 'no'], decimals=0)
     .data_color(
         palette="Blues",
         domain=[0.11, 1],
@@ -226,14 +228,16 @@ reordered_month = month_crosstab[['month', 'yes', 'no', 'percent']]
 
 pretty_month = (GT(reordered_month)
     .tab_header(title="Month of Contact")
-    .fmt_number(columns='percent', decimals=2)
+    .tab_options(table_width="75%")
+    .fmt_percent(columns='percent')
+    .fmt_number(columns = ['yes', 'no'], decimals=0)
     .data_color(
         palette="Blues",
         domain=[0.11, 1],
         na_color="white"
     )
     .cols_align(align="center", columns=['month','yes','no','percent'])
-    .opt_vertical_padding(scale=0.5)
+    .opt_vertical_padding(scale=0.70)
 )
 pretty_month
 ```
@@ -257,7 +261,9 @@ reordered_campaign = campaign_crosstab[['contacts','yes','no','percent']]
 #stylize table
 pretty_campaign = (GT(reordered_campaign)
     .tab_header(title="Number of Contacts")
-    .fmt_number(columns='percent', decimals=2)
+    .tab_options(table_width = "75%")
+    .fmt_percent(columns='percent')
+    .fmt_number(columns = ['yes', 'no'], decimals=0)
     .data_color(
         palette="Blues",
         domain=[0.11, 1],
