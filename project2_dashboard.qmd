@@ -198,7 +198,7 @@ days_crosstab['days'] = days_crosstab.index
 reordered_days = days_crosstab[['days','yes','no','percent']]
 
 pretty_days = (GT(reordered_days)
-    .tab_header(title="Days of Contact")
+    .tab_header(title="Day of Contact")
     .tab_options(table_width="75%")
     .fmt_percent(columns='percent')
     .fmt_number(columns = ['yes', 'no'], decimals=0)
